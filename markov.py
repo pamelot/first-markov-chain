@@ -1,10 +1,10 @@
-import sys
+import sys, random
 from time import sleep
 
-
-def make_chains():
+filename = str(sys.argv[1])
+def make_chains(file_path):
     """Takes input text as string; returns dictionary of markov chains."""
-    filename = str(sys.argv[1])
+    
     complete_string = ''
     tuple_dictionary = {}
     with open(filename) as source_file:
@@ -13,24 +13,26 @@ def make_chains():
     complete_list = complete_string.split(" ") 
     
     for i in range(len(complete_list)-2):
-        new_tuple = (complete_list [i], complete_list [i +1])
+        new_tuple = (complete_list[i], complete_list[i +1])
 
         if new_tuple in tuple_dictionary:
             tuple_dictionary[new_tuple].append(complete_list[i+2])
         else:
             tuple_dictionary[new_tuple] = [complete_list[i+2]]
+        #alternatively, we can use setdefault() method as shown below   
+        #tuple_dictionary.setdefault(new_tuple, []).append(complete_list[i+2])
 
     return tuple_dictionary
 
   
 
-make_chains()
+make_chains(filename)
 
 
 def make_text():
     """Takes dictionary of markov chains; returns random text."""
-    import random
-    pair_dictionary = make_chains()
+
+    pair_dictionary = make_chains(filename)
     current_tuple = random.choice(pair_dictionary.keys())
     output_list = list(current_tuple)
 
